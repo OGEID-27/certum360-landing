@@ -181,6 +181,8 @@ layer(base);
 @layer base {
   html {
     scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.38) transparent;
   }
   *,
   ::after,
@@ -196,6 +198,8 @@ layer(base);
   body {
     @apply relative font-normal font-outfit z-1 bg-gray-50 text-gray-800;
     min-height: 100vh;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.38) transparent;
     background: rgba(252, 253, 255, 1);
     background:
       radial-gradient(
@@ -218,6 +222,44 @@ layer(base);
     background: rgba(70, 95, 255, 0.18);
     color: #101828;
   }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  html::-webkit-scrollbar-track,
+  body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  html::-webkit-scrollbar-thumb,
+  body::-webkit-scrollbar-thumb {
+    background-color: rgba(148, 163, 184, 0.42);
+    border-radius: 9999px;
+  }
+
+  html::-webkit-scrollbar-thumb:hover,
+  body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(148, 163, 184, 0.58);
+  }
+
+  html.dark,
+  .dark body {
+    scrollbar-color: rgba(148, 163, 184, 0.24) transparent;
+  }
+
+  html.dark::-webkit-scrollbar-thumb,
+  .dark body::-webkit-scrollbar-thumb {
+    background-color: rgba(148, 163, 184, 0.24);
+  }
+
+  html.dark::-webkit-scrollbar-thumb:hover,
+  .dark body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(148, 163, 184, 0.36);
+  }
+
   :root {
     --sidebar-active-color: #3f57ff;
     --sidebar-active-color-2: #6e83ff;
@@ -1449,7 +1491,7 @@ pre[class*="language-"].line-numbers {
   position: relative;
   z-index: 1;
   width: 100%;
-  height: clamp(69rem, 44vw, 39rem);
+  height: clamp(42rem, 44vw, 39rem);
   margin-inline: auto;
   overflow: hidden;
   border-radius: 25px;

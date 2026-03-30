@@ -20,11 +20,11 @@ import {
   Database,
   History,
   LayoutTemplate,
+  LogIn,
   LucideAngularModule,
   Menu,
   MessagesSquare,
   NotebookPen,
-  Play,
   Pyramid,
   Rocket,
   Send,
@@ -74,6 +74,7 @@ type JourneyStep = {
 
 type PlatformModule = {
   readonly title: string;
+  readonly panelLabel: string;
   readonly description: string;
   readonly icon: typeof ShieldCheck;
   readonly iconClass: string;
@@ -101,10 +102,16 @@ type PlanItem = {
   readonly badge: string;
   readonly description: string;
   readonly amountLabel: string;
+  readonly priceMxn: string;
+  readonly priceUsd: string;
+  readonly billingLabel: string;
   readonly featuredBenefits: readonly string[];
   readonly keyLimits: readonly string[];
   readonly footerLabel: string;
+  readonly ctaLabel: string;
+  readonly ctaHref: string;
   readonly highlight?: string;
+  readonly outlineClass: string;
   readonly shellClass: string;
   readonly badgeClass: string;
   readonly statusClass: string;
@@ -140,27 +147,35 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
   private processStepElements: HTMLElement[] = [];
   private platformDeckTimer?: ReturnType<typeof setInterval>;
 
-  readonly Menu = Menu;
-  readonly X = X;
   readonly ChevronRight = ChevronRight;
-  readonly Play = Play;
+  readonly LogIn = LogIn;
+  readonly Menu = Menu;
   readonly Bell = Bell;
   readonly ShieldCheck = ShieldCheck;
   readonly ClipboardCheck = ClipboardCheck;
   readonly CheckCircle2 = CheckCircle2;
   readonly Star = Star;
+  readonly UserPlus = UserPlus;
+  readonly X = X;
   readonly currentYear = new Date().getFullYear();
+  readonly loginHref = '/?auth=login';
+  readonly registerHref = '/?auth=register';
+  readonly salesHref =
+    'mailto:contacto@certum360.demo?subject=Contactar%20a%20ventas%20Certum360';
+  readonly showContextSection = false;
+  readonly showPlatformScreensSection = false;
+  readonly showMetricsSection = false;
+  readonly showClosingSection = false;
 
-  mobileMenuOpen = false;
   isScrolled = false;
   metricsAnimated = false;
+  mobileMenuOpen = false;
   activeProcessStep = 0;
   activePlatformScreen = 0;
   currentTheme: ThemeMode = 'light';
 
   readonly navLinks: readonly NavLink[] = [
-    { id: 'contexto', label: 'Contexto' },
-    { id: 'capacidades', label: 'Solucion' },
+    { id: 'capacidades', label: 'Solución' },
     { id: 'proceso', label: 'Proceso' },
     { id: 'plataforma', label: 'Plataforma' },
     { id: 'planes', label: 'Paquetes' },
@@ -228,7 +243,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
       title: 'Visibilidad',
       description:
         'Indicadores ejecutivos, alertas y recomendaciones para ver avance, rezagos y focos de riesgo sin hojas paralelas.',
-      detail: 'Senales accionables',
+      detail: 'Señales accionables',
       icon: ChartCandlestick,
       iconClass:
         'bg-emerald-500/15 text-emerald-700 ring-emerald-500/20 dark:bg-emerald-500/16 dark:text-emerald-200',
@@ -239,7 +254,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
       title: 'Escalable',
       description:
         'Crecimiento por equipos, sedes, clientes o unidades con trazabilidad, responsables y control administrativo.',
-      detail: 'Multi area y multisede',
+      detail: 'Multiárea y multisede',
       icon: Rocket,
       iconClass:
         'bg-violet-500/15 text-violet-700 ring-violet-500/20 dark:bg-violet-500/16 dark:text-violet-200',
@@ -250,7 +265,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
 
   readonly contextCards: readonly IconCard[] = [
     {
-      title: 'Informacion dispersa',
+      title: 'Información dispersa',
       description:
         'Evaluaciones, evidencias, responsables y avances viven en correos, hojas y archivos aislados que rompen el contexto del proceso.',
       detail: 'Contexto fragmentado',
@@ -263,7 +278,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
     {
       title: 'Seguimiento manual',
       description:
-        'Los equipos persiguen pendientes, recordatorios y cierres a mano, lo que consume tiempo operativo y deja huecos en la ejecucion.',
+        'Los equipos persiguen pendientes, recordatorios y cierres a mano, lo que consume tiempo operativo y deja huecos en la ejecución.',
       detail: 'Carga operativa innecesaria',
       icon: TriangleAlert,
       iconClass:
@@ -274,7 +289,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
     {
       title: 'Baja visibilidad',
       description:
-        'Sin una lectura ejecutiva clara, cuesta detectar rezagos, comparar frentes y entender donde se esta elevando el riesgo o el incumplimiento.',
+        'Sin una lectura ejecutiva clara, cuesta detectar rezagos, comparar frentes y entender dónde se está elevando el riesgo o el incumplimiento.',
       detail: 'Lectura parcial del avance',
       icon: Unplug,
       iconClass:
@@ -285,7 +300,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
     {
       title: 'Decisiones lentas y sin trazabilidad',
       description:
-        'Cuando el historial de acciones no esta conectado, auditar cambios, justificar decisiones y acelerar cierres se vuelve mucho mas dificil.',
+        'Cuando el historial de acciones no está conectado, auditar cambios, justificar decisiones y acelerar cierres se vuelve mucho más difícil.',
       detail: 'Respuesta reactiva',
       icon: History,
       iconClass:
@@ -297,9 +312,9 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
 
   readonly capabilities: readonly IconCard[] = [
     {
-      title: 'Ordena la operacion desde una sola base',
+      title: 'Ordena la operación desde una sola base',
       description:
-        'Centraliza banco de preguntas, secciones, cuestionarios y asignaciones para que cada equipo trabaje sobre una estructura comun.',
+        'Centraliza banco de preguntas, secciones, cuestionarios y asignaciones para que cada equipo trabaje sobre una estructura común.',
       detail: 'Menos hojas paralelas',
       icon: LayoutTemplate,
       iconClass:
@@ -319,9 +334,9 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
         'from-sky-500/16 via-sky-500/0 to-sky-500/0 dark:from-sky-500/12',
     },
     {
-      title: 'Reduce dispersion entre frentes',
+      title: 'Reduce dispersión entre frentes',
       description:
-        'Reune evaluacion, certificacion, cumplimiento y control administrativo en una sola plataforma operativa y ejecutiva.',
+        'Reúne evaluación, certificación, cumplimiento y control administrativo en una sola plataforma operativa y ejecutiva.',
       detail: 'Un solo entorno',
       icon: ChartCandlestick,
       iconClass:
@@ -343,7 +358,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
     {
       title: 'Sostiene cumplimiento con trazabilidad',
       description:
-        'Cada hallazgo, evidencia, responsable y cierre queda conectado para auditoria, certificacion y mejora continua.',
+        'Cada hallazgo, evidencia, responsable y cierre queda conectado para auditoría, certificación y mejora continua.',
       detail: 'Rastro verificable',
       icon: BookUser,
       iconClass:
@@ -367,7 +382,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
   readonly journeySteps: readonly JourneyStep[] = [
     {
       index: '01',
-      stage: 'Base de evaluacion',
+      stage: 'Base de evaluación',
       title: 'Estructura el modelo que vas a controlar',
       description:
         'Organiza banco de preguntas, secciones, criterios y ponderaciones para cada proceso, cliente o unidad.',
@@ -378,10 +393,10 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
     },
     {
       index: '02',
-      stage: 'Activacion operativa',
+      stage: 'Activación operativa',
       title: 'Asigna y pone en marcha cada frente',
       description:
-        'Distribuye cuestionarios y certificaciones con responsables, fechas y alcance visibles desde una sola operacion.',
+        'Distribuye cuestionarios y certificaciones con responsables, fechas y alcance visibles desde una sola operación.',
       detail: 'Cada frente inicia con seguimiento claro.',
       icon: Send,
       toneClass:
@@ -392,7 +407,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
       stage: 'Lectura en tiempo real',
       title: 'Da seguimiento y detecta alertas',
       description:
-        'Con respuestas, evidencias y avance en curso, el sistema muestra rezagos, alertas y senales de riesgo.',
+        'Con respuestas, evidencias y avance en curso, el sistema muestra rezagos, alertas y señales de riesgo.',
       detail: 'El control se vuelve visible mientras ocurre.',
       icon: Bell,
       toneClass:
@@ -403,7 +418,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
       stage: 'Cierre con trazabilidad',
       title: 'Consolida cumplimiento y decisiones',
       description:
-        'Resultados, cumplimiento y acciones quedan conectados para auditoria, certificacion y mejora continua.',
+        'Resultados, cumplimiento y acciones quedan conectados para auditoría, certificación y mejora continua.',
       detail: 'Nada se pierde entre documentos ni responsables.',
       icon: BadgeCheck,
       toneClass:
@@ -414,63 +429,69 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
   readonly platformModules: readonly PlatformModule[] = [
     {
       title: 'Banco de preguntas',
+      panelLabel: 'certum360.app/banco-preguntas',
       description:
         'Control central de reactivos reutilizables para mantener consistencia sectorial y operativa.',
       icon: Database,
       iconClass:
         'bg-brand-500/15 text-brand-700 ring-brand-500/20 dark:bg-brand-500/16 dark:text-brand-200',
       glowClass:
-        'from-brand-500/20 via-brand-500/0 to-brand-500/0 dark:from-brand-500/14',
+        'from-brand-500/14 via-brand-500/5 to-transparent dark:from-brand-500/18 dark:via-brand-500/5',
     },
     {
       title: 'Secciones',
+      panelLabel: 'certum360.app/secciones',
       description:
-        'Agrupa criterios, pesos y temas para construir evaluaciones mas claras y mantenibles.',
+        'Agrupa criterios, pesos y temas para construir evaluaciones más claras y mantenibles.',
       icon: LayoutTemplate,
       iconClass:
         'bg-sky-500/15 text-sky-700 ring-sky-500/20 dark:bg-sky-500/16 dark:text-sky-200',
       glowClass:
-        'from-sky-500/20 via-sky-500/0 to-sky-500/0 dark:from-sky-500/14',
+        'from-sky-500/14 via-sky-500/5 to-transparent dark:from-sky-500/18 dark:via-sky-500/5',
     },
     {
       title: 'Cuestionarios',
+      panelLabel: 'certum360.app/cuestionarios',
       description:
-        'Versiona instrumentos listos para campo, auditoria, compliance o levantamiento operativo.',
+        'Versiona instrumentos listos para campo, auditoría, compliance o levantamiento operativo.',
       icon: MessagesSquare,
       iconClass:
         'bg-emerald-500/15 text-emerald-700 ring-emerald-500/20 dark:bg-emerald-500/16 dark:text-emerald-200',
       glowClass:
-        'from-emerald-500/20 via-emerald-500/0 to-emerald-500/0 dark:from-emerald-500/14',
+        'from-emerald-500/14 via-emerald-500/5 to-transparent dark:from-emerald-500/18 dark:via-emerald-500/5',
     },
     {
       title: 'Certificaciones',
+      panelLabel: 'certum360.app/certificaciones',
       description:
         'Coordina validaciones, estatus y evidencia sin salir de la misma experiencia del producto.',
       icon: BadgeCheck,
       iconClass:
         'bg-violet-500/15 text-violet-700 ring-violet-500/20 dark:bg-violet-500/16 dark:text-violet-200',
       glowClass:
-        'from-violet-500/20 via-violet-500/0 to-violet-500/0 dark:from-violet-500/14',
+        'from-violet-500/14 via-violet-500/5 to-transparent dark:from-violet-500/18 dark:via-violet-500/5',
     },
     {
       title: 'Asignaciones',
+      panelLabel: 'certum360.app/asignaciones',
       description:
         'Dispara cuestionarios por grupo, cliente, sede o responsable con prioridad y fecha objetivo.',
       icon: UserPlus,
       iconClass:
         'bg-amber-500/15 text-amber-700 ring-amber-500/20 dark:bg-amber-500/16 dark:text-amber-200',
       glowClass:
-        'from-amber-500/20 via-amber-500/0 to-amber-500/0 dark:from-amber-500/14',
+        'from-amber-500/14 via-amber-500/5 to-transparent dark:from-amber-500/18 dark:via-amber-500/5',
     },
     {
       title: 'Calculadora de riesgos',
+      panelLabel: 'certum360.app/riesgos',
       description:
-        'Convierte cumplimiento, hallazgos y evidencias en una lectura clara para saber como va la empresa.',
+        'Convierte cumplimiento, hallazgos y evidencias en una lectura clara para saber cómo va la empresa.',
       icon: Pyramid,
       iconClass:
         'bg-slate-500/12 text-slate-700 ring-slate-500/20 dark:bg-white/[0.06] dark:text-slate-200',
       glowClass:
-        'from-slate-500/18 via-slate-500/0 to-slate-500/0 dark:from-slate-500/12',
+        'from-slate-500/14 via-slate-500/5 to-transparent dark:from-slate-400/18 dark:via-slate-400/5',
     },
   ];
 
@@ -487,13 +508,13 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
       title: 'Secciones listas para modelar cada flujo',
       eyebrow: 'Arquitectura evaluativa',
       description:
-        'Agrupa temas, pesos y logica de evaluacion para mantener claridad entre clientes, areas y procesos.',
+        'Agrupa temas, pesos y lógica de evaluación para mantener claridad entre clientes, áreas y procesos.',
       lightSrc: '/images/landing/landing_secciones_white.png',
       darkSrc: '/images/landing/landing_secciones_dark.png',
     },
     {
-      title: 'Asignaciones visibles para coordinar ejecucion',
-      eyebrow: 'Operacion activada',
+      title: 'Asignaciones visibles para coordinar ejecución',
+      eyebrow: 'Operación activada',
       description:
         'Distribuye cuestionarios por responsable, grupo o sede sin perder prioridad, fechas objetivo ni seguimiento.',
       lightSrc: '/images/landing/landing_asignacion_white.png',
@@ -503,7 +524,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
       title: 'Evaluaciones activas con lectura de avance',
       eyebrow: 'Seguimiento operativo',
       description:
-        'Consulta el estado de cada evaluacion, identifica rezagos y entiende que frente requiere atencion inmediata.',
+        'Consulta el estado de cada evaluación, identifica rezagos y entiende qué frente requiere atención inmediata.',
       lightSrc: '/images/landing/landing_evaluaciones_white.png',
       darkSrc: '/images/landing/landing_evaluaciones_dark.png',
     },
@@ -511,15 +532,15 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
       title: 'Experiencia de respuesta conectada',
       eyebrow: 'Captura en campo',
       description:
-        'Responder cuestionarios se integra al mismo flujo de asignacion, evidencia y trazabilidad del resto del sistema.',
+        'Responder cuestionarios se integra al mismo flujo de asignación, evidencia y trazabilidad del resto del sistema.',
       lightSrc: '/images/landing/landing_contestar_white.png',
       darkSrc: '/images/landing/landing_contestar_dark.png',
     },
     {
-      title: 'Calificacion con criterio y cierre claro',
-      eyebrow: 'Validacion y resultado',
+      title: 'Calificación con criterio y cierre claro',
+      eyebrow: 'Validación y resultado',
       description:
-        'La plataforma consolida respuestas, evidencia y resultado para facilitar revision, calificacion y decisiones.',
+        'La plataforma consolida respuestas, evidencia y resultado para facilitar revisión, calificación y decisiones.',
       lightSrc: '/images/landing/landing_calificar_white.png',
       darkSrc: '/images/landing/landing_calificar_dark.png',
     },
@@ -569,19 +590,25 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
       name: 'Essential',
       badge: 'Base',
       description:
-        'Acceso base a Certum360 para centralizar evaluaciones, asignaciones y seguimiento con una operacion ordenada desde el primer despliegue.',
+        'Acceso base a Certum360 para centralizar evaluaciones, asignaciones y seguimiento con una operación ordenada desde el primer despliegue.',
       amountLabel: 'Licenciamiento anual',
+      priceMxn: '$54,900 MXN',
+      priceUsd: '≈ $3,290 USD',
+      billingLabel: 'por año',
       featuredBenefits: [
         'Cuestionarios, secciones y banco de preguntas configurables',
         'Asignaciones con seguimiento visible por responsable y fecha',
         'Alertas base y trazabilidad sobre respuestas, evidencias y cierres',
       ],
       keyLimits: [
-        'Operacion inicial con control operativo',
+        'Operación inicial con control operativo',
         'Cumplimiento y avance en una sola vista',
       ],
       footerLabel:
-        'Pensado para empezar con disciplina operativa sin sobredimensionar la implementacion.',
+        'Pensado para empezar con disciplina operativa sin sobredimensionar la implementación.',
+      ctaLabel: 'Contratar',
+      ctaHref: '/?auth=register&plan=essential',
+      outlineClass: 'plan-shell--brand',
       shellClass:
         'border-brand-200/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(239,246,255,0.92),rgba(255,255,255,0.9))] dark:border-brand-500/20 dark:bg-[linear-gradient(160deg,rgba(17,24,39,0.96),rgba(37,99,235,0.18),rgba(15,23,42,0.98))]',
       badgeClass:
@@ -595,20 +622,26 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
       name: 'Professional',
       badge: 'Escalable',
       description:
-        'La capa mas balanceada para operar Certum360 con mayor visibilidad, cumplimiento activo y lectura ejecutiva sobre riesgo.',
+        'La capa más balanceada para operar Certum360 con mayor visibilidad, cumplimiento activo y lectura ejecutiva sobre riesgo.',
       amountLabel: 'Licenciamiento anual',
+      priceMxn: '$96,900 MXN',
+      priceUsd: '≈ $5,790 USD',
+      billingLabel: 'por año',
       featuredBenefits: [
-        'Prioridades, alertas y estado por area, sede o cliente',
+        'Prioridades, alertas y estado por área, sede o cliente',
         'Seguimiento de cumplimiento, hallazgos y certificaciones en un mismo flujo',
         'Trazabilidad de acciones correctivas y lectura ejecutiva de riesgo',
       ],
       keyLimits: [
-        'Escala por area, sede o cliente',
-        'Operacion con mas control y seguimiento',
+        'Escala por área, sede o cliente',
+        'Operación con más control y seguimiento',
       ],
       footerLabel:
-        'La opcion mas balanceada para crecer dentro de la plataforma sin perder claridad operativa.',
-      highlight: 'Mas popular',
+        'La opción más balanceada para crecer dentro de la plataforma sin perder claridad operativa.',
+      ctaLabel: 'Contratar',
+      ctaHref: '/?auth=register&plan=professional',
+      highlight: 'Más popular',
+      outlineClass: 'plan-shell--violet',
       shellClass:
         'border-violet-200/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(245,243,255,0.94),rgba(255,255,255,0.9))] dark:border-violet-500/20 dark:bg-[linear-gradient(160deg,rgba(17,24,39,0.96),rgba(109,40,217,0.22),rgba(15,23,42,0.98))]',
       badgeClass:
@@ -622,19 +655,26 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
       name: 'Enterprise',
       badge: 'Corporativo',
       description:
-        'Cobertura corporativa para ecosistemas multiunidad que requieren gobierno, segmentacion operativa y trazabilidad transversal.',
+        'Cobertura corporativa para ecosistemas multiunidad que requieren gobierno, segmentación operativa y trazabilidad transversal.',
       amountLabel: 'Licenciamiento anual',
+      priceMxn: '$164,900 MXN',
+      priceUsd: '≈ $9,890 USD',
+      billingLabel: 'por año',
       featuredBenefits: [
         'Gobierno por unidades, sedes o clientes con visibilidad consolidada',
         'Control avanzado de riesgos, cumplimiento y certificaciones',
-        'Seguimiento corporativo con trazabilidad completa para auditoria y expansion',
+        'Seguimiento corporativo con trazabilidad completa para auditoría y expansión',
       ],
       keyLimits: [
         'Escala corporativa con lectura consolidada',
-        'Operacion avanzada para multiples equipos',
+        'Operación avanzada para múltiples equipos',
       ],
       footerLabel:
         'Preparado para despliegues con mayor complejidad, volumen y necesidad de control transversal.',
+      ctaLabel: 'Contratar',
+      ctaHref:
+        'mailto:contacto@certum360.demo?subject=Enterprise%20Certum360',
+      outlineClass: 'plan-shell--amber',
       shellClass:
         'border-amber-200/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(255,251,235,0.94),rgba(255,255,255,0.9))] dark:border-amber-500/20 dark:bg-[linear-gradient(160deg,rgba(17,24,39,0.96),rgba(146,64,14,0.2),rgba(15,23,42,0.98))]',
       badgeClass:
@@ -649,35 +689,35 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
   readonly testimonials: readonly TestimonialItem[] = [
     {
       quote:
-        'Teniamos evaluaciones y pendientes repartidos en varias hojas. Con Certum360 hoy vemos responsables, alertas y seguimiento en una sola lectura operativa.',
-      name: 'Maria Fernanda Rios',
+        'Teníamos evaluaciones y pendientes repartidos en varias hojas. Con Certum360 hoy vemos responsables, alertas y seguimiento en una sola lectura operativa.',
+      name: 'María Fernanda Ríos',
       role: 'Directora de Operaciones',
       company: 'Grupo Axiona',
     },
     {
       quote:
-        'La direccion recibe una lectura ejecutiva de cumplimiento y riesgo sin pedir reportes aparte. Eso nos ayudo a ordenar sedes, prioridades y cierres con mas criterio.',
+        'La dirección recibe una lectura ejecutiva de cumplimiento y riesgo sin pedir reportes aparte. Eso nos ayudó a ordenar sedes, prioridades y cierres con más criterio.',
       name: 'Javier Solano',
       role: 'Gerente de Compliance',
       company: 'Nortia Industrial',
     },
     {
       quote:
-        'Centralizar cuestionarios, evidencias y certificaciones nos dio trazabilidad real. Ahora cada evaluacion tiene contexto, seguimiento y fecha clara de cierre.',
-      name: 'Paula Castaneda',
-      role: 'Lider de Mejora Continua',
+        'Centralizar cuestionarios, evidencias y certificaciones nos dio trazabilidad real. Ahora cada evaluación tiene contexto, seguimiento y fecha clara de cierre.',
+      name: 'Paula Castañeda',
+      role: 'Líder de Mejora Continua',
       company: 'Vertex Salud Corporativa',
     },
     {
       quote:
-        'Lo mas util fue la priorizacion. Sabemos que evaluacion esta detenida, que riesgo subio y que responsable debe actuar antes de escalar el problema.',
+        'Lo más útil fue la priorización. Sabemos qué evaluación está detenida, qué riesgo subió y qué responsable debe actuar antes de escalar el problema.',
       name: 'Ricardo Mena',
       role: 'Director Comercial',
       company: 'Nova Integracion',
     },
     {
       quote:
-        'Para auditoria interna cambio por completo la conversacion: cada respuesta, evidencia y accion correctiva queda trazable y lista para seguimiento o certificacion.',
+        'Para auditoría interna cambió por completo la conversación: cada respuesta, evidencia y acción correctiva queda trazable y lista para seguimiento o certificación.',
       name: 'Daniela Paredes',
       role: 'Head of Quality',
       company: 'Orbis Logistica',
@@ -712,6 +752,13 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
   onWindowScroll(): void {
     this.isScrolled = window.scrollY > 16;
     this.updateActiveProcessStep();
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+      this.mobileMenuOpen = false;
+    }
   }
 
   ngAfterViewInit(): void {
@@ -774,14 +821,6 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  toggleMobileMenu(): void {
-    this.mobileMenuOpen = !this.mobileMenuOpen;
-  }
-
-  closeMobileMenu(): void {
-    this.mobileMenuOpen = false;
-  }
-
   formatMetric(metric: MetricItem): string {
     return `${metric.prefix}${Math.round(metric.displayValue).toLocaleString(
       'es-MX',
@@ -791,6 +830,14 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
   initials(fullName: string): string {
     const [first = '', second = ''] = fullName.split(' ');
     return `${first.charAt(0)}${second.charAt(0)}`.toUpperCase();
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
   }
 
   setActivePlatformScreen(index: number): void {
@@ -830,6 +877,10 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
   platformScreenshotZIndex(index: number): number {
     const order = this.getPlatformScreenOrder(index);
     return Math.max(0, this.platformScreens.length - order);
+  }
+
+  planCtaIcon(plan: PlanItem): typeof ShieldCheck {
+    return ChevronRight;
   }
 
   private startMetricAnimation(): void {
@@ -917,6 +968,7 @@ export class LandingComponent implements AfterViewInit, OnDestroy {
 
   private initializePlatformDeck(reduceMotion: boolean): void {
     if (
+      !this.showPlatformScreensSection ||
       reduceMotion ||
       typeof window === 'undefined' ||
       this.platformScreens.length < 2

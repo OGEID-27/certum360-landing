@@ -10,115 +10,114 @@
   </div>
 
   <header
-    class="fixed inset-x-0 top-0 z-99999 transition-all duration-300"
-    [class.pt-3]="!isScrolled"
-    [class.pt-2]="isScrolled"
+    class="landing-header app-header-glass fixed inset-x-0 top-0 z-99999 transition-all duration-300"
+    [class.landing-header--scrolled]="isScrolled"
   >
-    <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div
-        data-reveal="up"
-        class="app-header-glass rounded-[30px] border border-white/60 px-4 py-3 transition-all duration-300 dark:border-white/10 sm:px-5"
-        [class.shadow-[0_24px_70px_-34px_rgba(15,23,42,0.45)]]="isScrolled"
-      >
-        <div class="flex items-center justify-between gap-3">
-          <a
-            href="#inicio"
-            class="brand-lockup flex min-w-0 items-center gap-3"
-            (click)="closeMobileMenu()"
-          >
-            <img
-              src="/images/logo/certum360_icono.png"
-              alt="Certum360"
-              class="brand-lockup__icon header-brand-icon h-11 w-auto shrink-0 object-contain sm:h-12"
-              loading="eager"
-              decoding="async"
-            />
-            <span class="min-w-0">
-              <span
-                class="block truncate text-base font-semibold tracking-[0.12em] text-gray-900 dark:text-white"
-              >
-                Certum360
-              </span>
-              <span
-                class="block truncate text-xs uppercase tracking-[0.28em] text-gray-500 dark:text-gray-400"
-              >
-                Risk &amp; Compliance
-              </span>
+    <div class="landing-container">
+      <div data-reveal="up" class="landing-header__bar">
+        <a href="#inicio" class="brand-lockup flex min-w-0 items-center gap-3">
+          <img
+            src="/images/logo/certum360_icono.png"
+            alt="Certum360"
+            class="brand-lockup__icon header-brand-icon h-11 w-auto shrink-0 object-contain sm:h-12"
+            loading="eager"
+            decoding="async"
+          />
+          <span class="min-w-0">
+            <span
+              class="block truncate text-base font-semibold tracking-[0.12em] text-gray-900 dark:text-white"
+            >
+              Certum360
             </span>
+            <span
+              class="block truncate text-xs uppercase tracking-[0.28em] text-gray-500 dark:text-gray-400"
+            >
+              Risk &amp; Compliance
+            </span>
+          </span>
+        </a>
+
+        <div class="landing-header__actions landing-header__actions--desktop">
+          <a [href]="salesHref" class="landing-header__link landing-header__sales">
+            Contactar a ventas
           </a>
-
-          <nav
-            class="hidden items-center gap-1 rounded-full border border-white/60 bg-white/70 p-1.5 dark:border-white/10 dark:bg-slate-950/20 lg:flex"
+          <a
+            [href]="loginHref"
+            class="landing-header__cta landing-header__cta--secondary landing-header__login"
           >
-            @for (link of navLinks; track link.id) {
-              <a
-                class="rounded-full px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-white hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
-                [href]="'#' + link.id"
-              >
-                {{ link.label }}
-              </a>
-            }
-          </nav>
-
-          <div class="hidden items-center gap-3 lg:flex">
-            <app-theme-toggle-button />
-            <a
-              href="#contacto"
-              class="inline-flex items-center gap-2 rounded-full bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow-[0_20px_40px_-24px_rgba(15,23,42,0.8)] transition hover:-translate-y-0.5 hover:bg-brand-600 dark:bg-white dark:text-gray-900 dark:hover:bg-brand-500 dark:hover:text-white"
-            >
-              Solicitar demo
-              <lucide-icon [img]="ChevronRight" class="h-4 w-4"></lucide-icon>
-            </a>
-          </div>
-
-          <div class="flex items-center gap-2 lg:hidden">
-            <app-theme-toggle-button />
-            <button
-              type="button"
-              class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/60 bg-white/80 text-gray-700 shadow-theme-sm transition hover:bg-white dark:border-white/10 dark:bg-slate-950/20 dark:text-gray-200 dark:hover:bg-white/5"
-              (click)="toggleMobileMenu()"
-              [attr.aria-expanded]="mobileMenuOpen"
-              aria-label="Abrir menu"
-            >
-              <lucide-icon
-                [img]="mobileMenuOpen ? X : Menu"
-                class="h-5 w-5"
-              ></lucide-icon>
-            </button>
-          </div>
+            <lucide-icon [img]="LogIn" class="action-icon h-4 w-4"></lucide-icon>
+            Iniciar sesión
+          </a>
+          <a
+            [href]="registerHref"
+            class="landing-header__cta landing-header__cta--primary landing-header__register"
+          >
+            <lucide-icon
+              [img]="UserPlus"
+              class="action-icon h-4 w-4"
+            ></lucide-icon>
+            Regístrate
+          </a>
+          <app-theme-toggle-button class="landing-header__theme" />
         </div>
 
-        @if (mobileMenuOpen) {
-          <div
-            class="mt-4 border-t border-gray-200/80 pt-4 dark:border-white/10 lg:hidden"
+        <div class="landing-header__mobile-controls">
+          <button
+            type="button"
+            class="landing-header__menu-toggle"
+            [attr.aria-expanded]="mobileMenuOpen"
+            aria-label="Abrir menú"
+            (click)="toggleMobileMenu()"
           >
-            <nav class="grid gap-2">
-              @for (link of navLinks; track link.id) {
-                <a
-                  class="rounded-2xl border border-transparent px-4 py-3 text-sm font-medium text-gray-700 transition hover:border-gray-200 hover:bg-white/70 dark:text-gray-200 dark:hover:border-white/10 dark:hover:bg-white/5"
-                  [href]="'#' + link.id"
-                  (click)="closeMobileMenu()"
-                >
-                  {{ link.label }}
-                </a>
-              }
-            </nav>
-            <a
-              href="#contacto"
-              (click)="closeMobileMenu()"
-              class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-600 dark:bg-white dark:text-gray-900"
-            >
-              Solicitar demo
-              <lucide-icon [img]="ChevronRight" class="h-4 w-4"></lucide-icon>
-            </a>
-          </div>
-        }
+            <lucide-icon
+              [img]="mobileMenuOpen ? X : Menu"
+              class="h-5 w-5"
+            ></lucide-icon>
+          </button>
+        </div>
       </div>
+
+      @if (mobileMenuOpen) {
+        <div class="landing-header__mobile-menu">
+          <div class="landing-header__mobile-stack">
+            <a
+              [href]="salesHref"
+              class="landing-header__mobile-link landing-header__mobile-link--plain"
+              (click)="closeMobileMenu()"
+            >
+              Contactar a ventas
+            </a>
+            <a
+              [href]="loginHref"
+              class="landing-header__mobile-link landing-header__mobile-link--secondary"
+              (click)="closeMobileMenu()"
+            >
+              <lucide-icon [img]="LogIn" class="action-icon h-4 w-4"></lucide-icon>
+              Iniciar sesión
+            </a>
+            <a
+              [href]="registerHref"
+              class="landing-header__mobile-link landing-header__mobile-link--primary"
+              (click)="closeMobileMenu()"
+            >
+              <lucide-icon
+                [img]="UserPlus"
+                class="action-icon h-4 w-4"
+              ></lucide-icon>
+              Regístrate
+            </a>
+            <div class="landing-header__mobile-theme-row">
+              <span class="landing-header__mobile-theme-label">Cambiar modo</span>
+              <app-theme-toggle-button />
+            </div>
+          </div>
+        </div>
+      }
     </div>
   </header>
 
-  <main class="relative z-1 pt-28 sm:pt-32">
-    <section class="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24">
+  <main class="relative z-1 pt-32 sm:pt-36">
+    <section class="landing-container pb-16 lg:pb-24">
       <div class="hero-layout relative overflow-visible">
         <div class="hero-topline flex justify-center">
           <span data-reveal="up" class="section-kicker hero-top-badge w-fit">
@@ -166,18 +165,21 @@
             class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
             <a
-              href="#contacto"
-              class="inline-flex items-center justify-center gap-2 rounded-full bg-gray-900 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_24px_44px_-24px_rgba(15,23,42,0.75)] transition hover:-translate-y-0.5 hover:bg-brand-600 dark:bg-white dark:text-gray-900 dark:hover:bg-brand-500 dark:hover:text-white"
-            >
-              Solicitar demo
-              <lucide-icon [img]="ChevronRight" class="h-4 w-4"></lucide-icon>
-            </a>
-            <a
-              href="#plataforma"
+              [href]="loginHref"
               class="inline-flex items-center justify-center gap-2 rounded-full border border-gray-200 bg-white/85 px-6 py-3.5 text-sm font-semibold text-gray-700 shadow-theme-sm transition hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 dark:border-white/10 dark:bg-slate-950/20 dark:text-gray-200 dark:hover:border-brand-500/30 dark:hover:text-white"
             >
-              Explorar plataforma
-              <lucide-icon [img]="Play" class="h-4 w-4"></lucide-icon>
+              <lucide-icon [img]="LogIn" class="action-icon h-4 w-4"></lucide-icon>
+              Iniciar sesión
+            </a>
+            <a
+              [href]="registerHref"
+              class="inline-flex items-center justify-center gap-2 rounded-full bg-gray-900 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_24px_44px_-24px_rgba(15,23,42,0.75)] transition hover:-translate-y-0.5 hover:bg-brand-600 dark:bg-white dark:text-gray-900 dark:hover:bg-brand-500 dark:hover:text-white"
+            >
+              <lucide-icon
+                [img]="UserPlus"
+                class="action-icon h-4 w-4"
+              ></lucide-icon>
+              Regístrate
             </a>
           </div>
         </div>
@@ -259,68 +261,70 @@
       </div>
     </section>
 
+    @if (showContextSection) {
+      <section id="contexto" class="landing-container py-16 lg:py-24">
+        <div class="grid gap-10 lg:grid-cols-[0.82fr_1.18fr]">
+          <div data-reveal="left" class="max-w-xl">
+            <span class="section-kicker w-fit">Contexto</span>
+            <h2 class="section-title mt-4">
+              Cuando la operación se fragmenta, aparecen fricción, retrasos y
+              pérdida de control.
+            </h2>
+            <p class="section-copy mt-5">
+              El problema empieza cuando evaluaciones, evidencias, responsables y
+              avances quedan repartidos entre correos, hojas y archivos sueltos.
+              La visibilidad baja, el seguimiento se vuelve manual y la operación
+              pierde velocidad justo cuando más control necesita.
+            </p>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            @for (card of contextCards; track card.title; let i = $index) {
+              <article
+                data-reveal="up"
+                [style.--reveal-delay]="i * 90 + 'ms'"
+                class="context-card card-reveal group relative overflow-hidden rounded-[30px] p-6"
+              >
+                <div
+                  class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-br"
+                  [ngClass]="card.glowClass"
+                ></div>
+                <span
+                  class="relative inline-flex h-12 w-12 items-center justify-center rounded-2xl ring-1"
+                  [ngClass]="card.iconClass"
+                >
+                  <lucide-icon [img]="card.icon" class="h-5 w-5"></lucide-icon>
+                </span>
+                <h3
+                  class="relative mt-5 text-xl font-semibold text-gray-950 dark:text-white"
+                >
+                  {{ card.title }}
+                </h3>
+                <p
+                  class="relative mt-3 text-sm leading-7 text-gray-600 dark:text-gray-300"
+                >
+                  {{ card.description }}
+                </p>
+                <p
+                  class="relative mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400"
+                >
+                  {{ card.detail }}
+                </p>
+              </article>
+            }
+          </div>
+        </div>
+      </section>
+    }
+
     <section
-      id="contexto"
-      class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
+      id="capacidades"
+      class="surface-band section-clip section-outline-light py-16 lg:py-24"
     >
-      <div class="grid gap-10 lg:grid-cols-[0.82fr_1.18fr]">
-        <div data-reveal="left" class="max-w-xl">
-          <span class="section-kicker w-fit">Contexto</span>
-          <h2 class="section-title mt-4">
-            Cuando la operacion se fragmenta, aparecen friccion, retrasos y
-            perdida de control.
-          </h2>
-          <p class="section-copy mt-5">
-            El problema empieza cuando evaluaciones, evidencias, responsables y
-            avances quedan repartidos entre correos, hojas y archivos sueltos.
-            La visibilidad baja, el seguimiento se vuelve manual y la operacion
-            pierde velocidad justo cuando mas control necesita.
-          </p>
-        </div>
-
-        <div class="grid gap-4 sm:grid-cols-2">
-          @for (card of contextCards; track card.title; let i = $index) {
-            <article
-              data-reveal="up"
-              [style.--reveal-delay]="i * 90 + 'ms'"
-              class="context-card card-reveal group relative overflow-hidden rounded-[30px] p-6"
-            >
-              <div
-                class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-br"
-                [ngClass]="card.glowClass"
-              ></div>
-              <span
-                class="relative inline-flex h-12 w-12 items-center justify-center rounded-2xl ring-1"
-                [ngClass]="card.iconClass"
-              >
-                <lucide-icon [img]="card.icon" class="h-5 w-5"></lucide-icon>
-              </span>
-              <h3
-                class="relative mt-5 text-xl font-semibold text-gray-950 dark:text-white"
-              >
-                {{ card.title }}
-              </h3>
-              <p
-                class="relative mt-3 text-sm leading-7 text-gray-600 dark:text-gray-300"
-              >
-                {{ card.description }}
-              </p>
-              <p
-                class="relative mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400"
-              >
-                {{ card.detail }}
-              </p>
-            </article>
-          }
-        </div>
-      </div>
-    </section>
-
-    <section id="capacidades" class="surface-band section-clip py-16 lg:py-24">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+      <div class="landing-container">
+        <div class="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-start lg:gap-14">
           <div data-reveal="left" class="solution-copy max-w-2xl">
-            <span class="section-kicker w-fit">Solucion</span>
+            <span class="section-kicker w-fit">Solución</span>
             <h2 class="section-title mt-4">
               Una sola plataforma para ordenar evaluaciones, seguimiento y
               cumplimiento con visibilidad real.
@@ -328,12 +332,12 @@
             <p class="section-copy mt-5">
               Certum360 concentra cuestionarios, banco de preguntas,
               asignaciones, certificaciones y lectura de riesgo en un flujo
-              conectado que reduce friccion operativa, evita la dispersion entre
-              correos, hojas y documentos, y facilita decisiones mas claras.
+              conectado que reduce fricción operativa, evita la dispersión entre
+              correos, hojas y documentos, y facilita decisiones más claras.
             </p>
           </div>
 
-          <div class="solution-grid grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div class="solution-grid grid gap-5 md:grid-cols-2 2xl:grid-cols-3">
             @for (
               capability of capabilities;
               track capability.title;
@@ -342,7 +346,7 @@
               <article
                 data-reveal="up"
                 [style.--reveal-delay]="i * 75 + 'ms'"
-                class="capability-card solution-card card-reveal group relative overflow-hidden rounded-[28px] p-5"
+                class="capability-card solution-card card-reveal group relative overflow-hidden rounded-[28px] p-6"
               >
                 <div
                   class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-br"
@@ -382,7 +386,7 @@
     </section>
     <section
       id="proceso"
-      class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
+      class="landing-container section-outline-light py-16 lg:py-24"
     >
       <div
         class="process-layout grid gap-10 lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)] lg:gap-16"
@@ -442,18 +446,18 @@
           <div class="process-intro__sticky">
             <span class="section-kicker w-fit">Proceso</span>
             <h2 class="section-title mt-4">
-              Asi se activa el control operativo dentro de Certum360.
+              Así se activa el control operativo dentro de Certum360.
             </h2>
             <p class="section-copy mt-5">
               Desde la estructura inicial hasta la trazabilidad de cierre, la
-              plataforma conecta configuracion, asignacion, seguimiento y
+              plataforma conecta configuración, asignación, seguimiento y
               lectura ejecutiva sin cambiar de herramienta.
             </p>
 
             <div class="process-intro-note mt-8">
               <span class="process-intro-note__label">Flujo continuo</span>
               <p>
-                El valor de la solucion no vive en un modulo aislado: se
+                El valor de la solución no vive en un módulo aislado: se
                 construye paso a paso con responsables, fechas, evidencias y
                 alertas visibles.
               </p>
@@ -465,18 +469,21 @@
 
     <section
       id="plataforma"
-      class="platform-section surface-band section-clip py-16 lg:py-24"
+      class="platform-section surface-band section-clip section-outline-light py-16 lg:py-24"
     >
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div data-reveal="left" class="platform-section__intro max-w-3xl">
-          <span class="section-kicker w-fit">Plataforma</span>
+      <div class="landing-container">
+        <div
+          data-reveal="left"
+          class="platform-section__intro mx-auto max-w-3xl text-center"
+        >
+          <span class="section-kicker w-fit justify-center">Plataforma</span>
           <h2 class="section-title mt-4">
-            Certum360 muestra una operacion visual, conectada y lista para
+            Certum360 muestra una operación visual, conectada y lista para
             ejecutar.
           </h2>
-          <p class="section-copy mt-5">
+          <p class="section-copy mx-auto mt-5">
             Pantallas reales del sistema enlazan banco de preguntas, secciones,
-            cuestionarios, asignaciones, evaluaciones, calificacion y
+            cuestionarios, asignaciones, evaluaciones, calificación y
             calculadora de riesgos dentro de una misma experiencia con
             seguimiento visible.
           </p>
@@ -494,201 +501,218 @@
               <article
                 data-reveal="up"
                 [style.--reveal-delay]="i * 65 + 'ms'"
-                class="context-card platform-card card-reveal group relative overflow-hidden rounded-[30px] px-6 pb-6 pt-8 text-center"
+                class="context-card platform-card card-reveal group relative overflow-hidden rounded-[30px] p-0 text-left"
               >
                 <div
                   class="platform-card__accent pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b"
                   [ngClass]="module.glowClass"
                 ></div>
-                <span
-                  class="platform-card__icon-shell relative mx-auto inline-flex h-16 w-16 items-center justify-center rounded-[1.35rem] ring-1"
-                  [ngClass]="module.iconClass"
-                >
-                  <lucide-icon
-                    [img]="module.icon"
-                    class="h-7 w-7"
-                  ></lucide-icon>
-                </span>
-                <h3
-                  class="relative mt-6 text-lg font-semibold text-gray-950 dark:text-white"
-                >
-                  {{ module.title }}
-                </h3>
-                <p
-                  class="relative mt-3 text-sm leading-7 text-gray-600 dark:text-gray-300"
-                >
-                  {{ module.description }}
-                </p>
+                <div class="platform-card__window relative">
+                  <div class="platform-card__chrome">
+                    <div class="platform-card__traffic" aria-hidden="true">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                    <span class="platform-card__panel">{{ module.panelLabel }}</span>
+                  </div>
+
+                  <div class="platform-card__body">
+                    <span
+                      class="platform-card__icon-shell relative inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.15rem] ring-1"
+                      [ngClass]="module.iconClass"
+                    >
+                      <lucide-icon
+                        [img]="module.icon"
+                        class="h-6 w-6"
+                      ></lucide-icon>
+                    </span>
+
+                    <div class="min-w-0">
+                      <h3
+                        class="relative text-lg font-semibold text-gray-950 dark:text-white"
+                      >
+                        {{ module.title }}
+                      </h3>
+                      <p
+                        class="relative mt-3 text-sm leading-7 text-gray-600 dark:text-gray-300"
+                      >
+                        {{ module.description }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </article>
             }
           </div>
 
-          <div
-            data-reveal="up"
-            [style.--reveal-delay]="'120ms'"
-            class="platform-stage app-bg-card-glass w-full rounded-[34px] p-0"
-          >
-            <div class="platform-stage__shell">
-              <div class="platform-stage__header">
-                <div class="min-w-0">
-                  <p class="platform-stage__eyebrow">
-                    {{ activePlatformSlide.eyebrow }}
-                  </p>
-                  <h3 class="platform-stage__title">
-                    {{ activePlatformSlide.title }}
-                  </h3>
-                  <p class="platform-stage__copy">
-                    {{ activePlatformSlide.description }}
-                  </p>
+          @if (showPlatformScreensSection) {
+            <div
+              data-reveal="up"
+              [style.--reveal-delay]="'120ms'"
+              class="platform-stage app-bg-card-glass w-full rounded-[34px] p-0"
+            >
+              <div class="platform-stage__shell">
+                <div class="platform-stage__header">
+                  <div class="min-w-0">
+                    <p class="platform-stage__eyebrow">
+                      {{ activePlatformSlide.eyebrow }}
+                    </p>
+                    <h3 class="platform-stage__title">
+                      {{ activePlatformSlide.title }}
+                    </h3>
+                    <p class="platform-stage__copy">
+                      {{ activePlatformSlide.description }}
+                    </p>
+                  </div>
+
+                  <span class="platform-stage__badge">Producto en uso</span>
                 </div>
 
-                <span class="platform-stage__badge">Producto en uso</span>
-              </div>
-
-              <div class="platform-deck" aria-live="polite">
-                @for (
-                  screen of platformScreens;
-                  track screen.lightSrc;
-                  let i = $index
-                ) {
-                  <article
-                    class="platform-shot"
-                    [attr.data-stack]="platformScreenshotState(i)"
-                    [style.z-index]="platformScreenshotZIndex(i)"
-                    [attr.aria-hidden]="
-                      platformScreenshotState(i) === 'front' ? null : 'true'
-                    "
-                  >
-                    <div class="platform-shot__frame">
-                      <img
-                        [src]="platformScreenshotSrc(screen)"
-                        [alt]="screen.title + ' en Certum360'"
-                        class="platform-shot__image"
-                        [loading]="i < 2 ? 'eager' : 'lazy'"
-                        decoding="async"
-                      />
-                    </div>
-                  </article>
-                }
-
-                <div class="platform-deck__shadow"></div>
-              </div>
-
-              <div class="platform-stage__footer">
-                <div
-                  class="platform-stage__dots"
-                  aria-label="Secuencia de pantallas de la plataforma"
-                >
+                <div class="platform-deck" aria-live="polite">
                   @for (
                     screen of platformScreens;
                     track screen.lightSrc;
                     let i = $index
                   ) {
-                    <button
-                      type="button"
-                      class="platform-stage__dot"
-                      [class.is-active]="activePlatformScreen === i"
-                      [attr.aria-label]="'Mostrar ' + screen.title"
-                      (click)="setActivePlatformScreen(i)"
-                    ></button>
+                    <article
+                      class="platform-shot"
+                      [attr.data-stack]="platformScreenshotState(i)"
+                      [style.z-index]="platformScreenshotZIndex(i)"
+                      [attr.aria-hidden]="
+                        platformScreenshotState(i) === 'front' ? null : 'true'
+                      "
+                    >
+                      <div class="platform-shot__frame">
+                        <img
+                          [src]="platformScreenshotSrc(screen)"
+                          [alt]="screen.title + ' en Certum360'"
+                          class="platform-shot__image"
+                          [loading]="i < 2 ? 'eager' : 'lazy'"
+                          decoding="async"
+                        />
+                      </div>
+                    </article>
                   }
+
+                  <div class="platform-deck__shadow"></div>
+                </div>
+
+                <div class="platform-stage__footer">
+                  <div
+                    class="platform-stage__dots"
+                    aria-label="Secuencia de pantallas de la plataforma"
+                  >
+                    @for (
+                      screen of platformScreens;
+                      track screen.lightSrc;
+                      let i = $index
+                    ) {
+                      <button
+                        type="button"
+                        class="platform-stage__dot"
+                        [class.is-active]="activePlatformScreen === i"
+                        [attr.aria-label]="'Mostrar ' + screen.title"
+                        (click)="setActivePlatformScreen(i)"
+                      ></button>
+                    }
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section
-      id="metricas"
-      class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
-    >
-      <div
-        data-reveal="up"
-        data-metrics="true"
-        class="metrics-shell rounded-[38px] p-6 sm:p-8 lg:p-10"
-      >
-        <div class="grid gap-8 xl:grid-cols-[0.9fr_1.1fr] xl:items-end">
-          <div class="max-w-3xl">
-            <span class="section-kicker section-kicker--muted w-fit"
-              >Metricas</span
-            >
-            <h2
-              class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-gray-950 dark:text-white sm:text-4xl"
-            >
-              Evaluaciones, usuarios y cumplimiento en una lectura ejecutiva
-              unificada.
-            </h2>
-            <p
-              class="mt-5 max-w-2xl text-base leading-8 text-gray-600 dark:text-gray-300"
-            >
-              Certum360 concentra avance operativo, procesos centralizados,
-              asignaciones activas, certificaciones y seguimiento visible para
-              que direccion y responsables lean el estado real sin salir de la
-              plataforma.
-            </p>
-          </div>
-
-          <div
-            class="rounded-[28px] border border-white/70 bg-white/82 p-5 shadow-theme-sm dark:border-white/10 dark:bg-white/[0.04]"
-          >
-            <div class="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p
-                  class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400"
-                >
-                  Lectura ejecutiva
-                </p>
-                <p
-                  class="mt-2 text-lg font-semibold text-gray-950 dark:text-white"
-                >
-                  Avance, asignaciones y cumplimiento visibles en una sola capa
-                </p>
-              </div>
-              <span
-                class="rounded-full border border-brand-300/70 bg-brand-500/12 px-3 py-1 text-xs font-semibold text-brand-700 dark:border-brand-500/35 dark:text-brand-200"
-              >
-                Trazabilidad activa
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          @for (metric of metrics; track metric.label; let i = $index) {
-            <article
-              data-reveal="up"
-              [style.--reveal-delay]="i * 80 + 'ms'"
-              class="metric-card rounded-[28px] p-6"
-            >
-              <p
-                class="text-4xl font-semibold tracking-[-0.05em] text-gray-950 dark:text-white sm:text-5xl"
-              >
-                {{ formatMetric(metric) }}
-              </p>
-              <p
-                class="mt-3 text-sm leading-7 text-gray-600 dark:text-gray-300"
-              >
-                {{ metric.label }}
-              </p>
-            </article>
           }
         </div>
       </div>
     </section>
+
+    @if (showMetricsSection) {
+      <section id="metricas" class="landing-container py-16 lg:py-24">
+        <div
+          data-reveal="up"
+          data-metrics="true"
+          class="metrics-shell rounded-[38px] p-6 sm:p-8 lg:p-10"
+        >
+          <div class="grid gap-8 xl:grid-cols-[0.9fr_1.1fr] xl:items-end">
+            <div class="max-w-3xl">
+              <span class="section-kicker section-kicker--muted w-fit"
+                >Metricas</span
+              >
+              <h2
+                class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-gray-950 dark:text-white sm:text-4xl"
+              >
+                Evaluaciones, usuarios y cumplimiento en una lectura ejecutiva
+                unificada.
+              </h2>
+              <p
+                class="mt-5 max-w-2xl text-base leading-8 text-gray-600 dark:text-gray-300"
+              >
+                Certum360 concentra avance operativo, procesos centralizados,
+                asignaciones activas, certificaciones y seguimiento visible para
+                que dirección y responsables lean el estado real sin salir de la
+                plataforma.
+              </p>
+            </div>
+
+            <div
+              class="rounded-[28px] border border-white/70 bg-white/82 p-5 shadow-theme-sm dark:border-white/10 dark:bg-white/[0.04]"
+            >
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p
+                    class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400"
+                  >
+                    Lectura ejecutiva
+                  </p>
+                  <p
+                    class="mt-2 text-lg font-semibold text-gray-950 dark:text-white"
+                  >
+                    Avance, asignaciones y cumplimiento visibles en una sola capa
+                  </p>
+                </div>
+                <span
+                  class="rounded-full border border-brand-300/70 bg-brand-500/12 px-3 py-1 text-xs font-semibold text-brand-700 dark:border-brand-500/35 dark:text-brand-200"
+                >
+                  Trazabilidad activa
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            @for (metric of metrics; track metric.label; let i = $index) {
+              <article
+                data-reveal="up"
+                [style.--reveal-delay]="i * 80 + 'ms'"
+                class="metric-card rounded-[28px] p-6"
+              >
+                <p
+                  class="text-4xl font-semibold tracking-[-0.05em] text-gray-950 dark:text-white sm:text-5xl"
+                >
+                  {{ formatMetric(metric) }}
+                </p>
+                <p
+                  class="mt-3 text-sm leading-7 text-gray-600 dark:text-gray-300"
+                >
+                  {{ metric.label }}
+                </p>
+              </article>
+            }
+          </div>
+        </div>
+      </section>
+    }
     <section id="planes" class="surface-band section-clip py-16 lg:py-24">
-      <div class="mx-auto max-w-[90rem] px-4 sm:px-6 lg:px-8">
+      <div class="landing-container">
         <div data-reveal="up" class="mx-auto max-w-3xl text-center">
           <span class="section-kicker w-fit justify-center">Paquetes</span>
           <h2 class="section-title mt-4">
-            Paquetes que activan Certum360 segun el nivel de operacion que
+            Paquetes que activan Certum360 según el nivel de operación que
             necesita cada cliente.
           </h2>
           <p class="section-copy mx-auto mt-5">
             Cada esquema da acceso anual a la plataforma con distinto alcance en
             cuestionarios, seguimiento, cumplimiento, riesgos y trazabilidad. La
-            propuesta crece desde una operacion ordenada hasta una cobertura
+            propuesta crece desde una operación ordenada hasta una cobertura
             corporativa con lectura ejecutiva consolidada.
           </p>
         </div>
@@ -701,6 +725,7 @@
               class="plan-shell card-reveal relative overflow-hidden rounded-[34px] border p-7 shadow-[0_20px_80px_-45px_rgba(15,23,42,0.45)] dark:shadow-[0_24px_80px_-52px_rgba(2,6,23,0.8)]"
               [ngClass]="[
                 plan.shellClass,
+                plan.outlineClass,
                 plan.highlight
                   ? 'plan-shell--featured z-[2] p-8 shadow-[0_34px_95px_-54px_rgba(76,29,149,0.34)] dark:shadow-[0_38px_100px_-56px_rgba(76,29,149,0.52)] lg:-translate-y-1.5 lg:scale-[1.01]'
                   : '',
@@ -744,6 +769,13 @@
                   >
                     {{ plan.name }}
                   </h3>
+                  <div class="plan-price mt-5">
+                    <div class="plan-price__main">{{ plan.priceMxn }}</div>
+                    <div class="plan-price__meta">
+                      <span>{{ plan.billingLabel }}</span>
+                      <span>{{ plan.priceUsd }}</span>
+                    </div>
+                  </div>
                   <p
                     class="mt-3 max-w-xl text-sm leading-7 text-gray-600 dark:text-gray-300"
                   >
@@ -804,18 +836,18 @@
                     <span
                       class="text-xs uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400"
                     >
-                      Pagos anuales
+                      Facturación anual
                     </span>
                   </div>
                   <a
-                    href="#contacto"
+                    [href]="plan.ctaHref"
                     class="inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold transition"
                     [ngClass]="plan.buttonClass"
                   >
-                    Cotizar
+                    {{ plan.ctaLabel }}
                     <lucide-icon
-                      [img]="ChevronRight"
-                      class="h-4 w-4"
+                      [img]="planCtaIcon(plan)"
+                      class="action-icon h-4 w-4"
                     ></lucide-icon>
                   </a>
                 </div>
@@ -828,17 +860,20 @@
 
     <section
       id="testimonios"
-      class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
+      class="landing-container section-outline-light py-16 lg:py-24"
     >
-      <div data-reveal="up" class="flex max-w-3xl flex-col gap-4">
-        <span class="section-kicker w-fit">Testimonios</span>
+      <div
+        data-reveal="up"
+        class="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center"
+      >
+        <span class="section-kicker w-fit justify-center">Testimonios</span>
         <h2 class="section-title">
           Empresas y lideres que ya operan con Certum360 y encontraron orden,
           seguimiento y lectura ejecutiva real.
         </h2>
         <p class="section-copy">
           Estos comentarios reflejan el valor que la plataforma entrega en la
-          operacion diaria: mas trazabilidad, mejor control y una forma mas
+          operación diaria: más trazabilidad, mejor control y una forma más
           clara de gestionar cumplimiento, riesgos y prioridades.
         </p>
       </div>
@@ -905,67 +940,69 @@
       </div>
     </section>
 
-    <section id="contacto" class="mx-auto max-w-7xl px-4 pb-0 sm:px-6 lg:px-8">
-      <div
-        data-reveal="up"
-        class="closing-shell rounded-[40px] px-6 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-16"
-      >
-        <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
-          <div class="max-w-3xl">
-            <span
-              class="section-kicker w-fit dark:border-white/14 dark:bg-white/8 dark:text-white/82"
-              >Cierre</span
-            >
-            <h2
-              class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-gray-950 dark:text-white sm:text-4xl lg:text-5xl"
-            >
-              Lleva tu operacion de seguimiento a una plataforma con presencia,
-              control y trazabilidad real.
-            </h2>
-            <p
-              class="mt-5 text-base leading-8 text-gray-600 dark:text-white/78"
-            >
-              Certum360 esta planteado para organizaciones que quieren ordenar
-              evaluacion, cumplimiento, riesgo y mejora continua en una
-              propuesta comercial fuerte y tecnicamente creible.
-            </p>
+    @if (showClosingSection) {
+      <section id="contacto" class="landing-container pb-0">
+        <div
+          data-reveal="up"
+          class="closing-shell rounded-[40px] px-6 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-16"
+        >
+          <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div class="max-w-3xl">
+              <span
+                class="section-kicker w-fit dark:border-white/14 dark:bg-white/8 dark:text-white/82"
+                >Cierre</span
+              >
+              <h2
+                class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-gray-950 dark:text-white sm:text-4xl lg:text-5xl"
+              >
+                Lleva tu operación de seguimiento a una plataforma con presencia,
+                control y trazabilidad real.
+              </h2>
+              <p
+                class="mt-5 text-base leading-8 text-gray-600 dark:text-white/78"
+              >
+                Certum360 está planteado para organizaciones que quieren ordenar
+                evaluación, cumplimiento, riesgo y mejora continua en una
+                propuesta comercial fuerte y técnicamente creíble.
+              </p>
 
-            <div
-              class="mt-6 flex flex-wrap gap-3 text-sm text-gray-700 dark:text-white/74"
-            >
-              <span class="closing-pill"
-                >Banco de preguntas y cuestionarios</span
+              <div
+                class="mt-6 flex flex-wrap gap-3 text-sm text-gray-700 dark:text-white/74"
               >
-              <span class="closing-pill"
-                >Riesgo, alertas y recomendaciones</span
+                <span class="closing-pill"
+                  >Banco de preguntas y cuestionarios</span
+                >
+                <span class="closing-pill"
+                  >Riesgo, alertas y recomendaciones</span
+                >
+                <span class="closing-pill">Certificaciones y seguimiento</span>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <a
+                href="#planes"
+                class="inline-flex items-center justify-center gap-2 rounded-full bg-gray-950 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-500 dark:bg-white dark:text-gray-950 dark:hover:bg-brand-500 dark:hover:text-white"
               >
-              <span class="closing-pill">Certificaciones y seguimiento</span>
+                Cotizar
+                <lucide-icon [img]="ChevronRight" class="h-4 w-4"></lucide-icon>
+              </a>
+              <a
+                href="#inicio"
+                class="inline-flex items-center justify-center gap-2 rounded-full border border-gray-200/80 bg-white/72 px-6 py-3.5 text-sm font-semibold text-gray-700 transition hover:bg-white dark:border-white/14 dark:bg-white/6 dark:text-white dark:hover:bg-white/12"
+              >
+                Volver arriba
+                <lucide-icon [img]="ChevronRight" class="h-4 w-4"></lucide-icon>
+              </a>
             </div>
           </div>
-
-          <div class="flex flex-col gap-3 sm:flex-row lg:flex-col">
-            <a
-              href="#planes"
-              class="inline-flex items-center justify-center gap-2 rounded-full bg-gray-950 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-500 dark:bg-white dark:text-gray-950 dark:hover:bg-brand-500 dark:hover:text-white"
-            >
-              Cotizar
-              <lucide-icon [img]="ChevronRight" class="h-4 w-4"></lucide-icon>
-            </a>
-            <a
-              href="#inicio"
-              class="inline-flex items-center justify-center gap-2 rounded-full border border-gray-200/80 bg-white/72 px-6 py-3.5 text-sm font-semibold text-gray-700 transition hover:bg-white dark:border-white/14 dark:bg-white/6 dark:text-white dark:hover:bg-white/12"
-            >
-              Volver arriba
-              <lucide-icon [img]="ChevronRight" class="h-4 w-4"></lucide-icon>
-            </a>
-          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    }
   </main>
 
   <footer class="footer-shell mt-16">
-    <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+    <div class="landing-container py-14 sm:py-16 lg:py-20">
       <div
         class="footer-grid grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr_auto]"
       >
@@ -1004,7 +1041,7 @@
           <p
             class="text-xs font-semibold uppercase tracking-[0.22em] text-white/58"
           >
-            Navegacion
+            Navegación
           </p>
           <nav class="grid gap-3 text-sm">
             @for (link of navLinks; track link.id) {
@@ -1030,11 +1067,18 @@
 
         <div data-reveal="up" class="grid content-start gap-3 text-sm">
           <a
-            href="#contacto"
-            class="inline-flex items-center gap-2 rounded-full border border-white/16 bg-white/10 px-4 py-2.5 font-semibold text-white transition hover:bg-white/16"
+            [href]="registerHref"
+            class="footer-action footer-action--primary"
           >
-            Solicitar demo
-            <lucide-icon [img]="ChevronRight" class="h-4 w-4"></lucide-icon>
+            <lucide-icon [img]="UserPlus" class="action-icon h-4 w-4"></lucide-icon>
+            Regístrate
+          </a>
+          <a [href]="loginHref" class="footer-action footer-action--secondary">
+            <lucide-icon [img]="LogIn" class="action-icon h-4 w-4"></lucide-icon>
+            Iniciar sesión
+          </a>
+          <a [href]="salesHref" class="footer-action footer-action--link">
+            Contactar a ventas
           </a>
           <p class="text-white/76">contacto@certum360.demo</p>
           <p class="text-white/58">
